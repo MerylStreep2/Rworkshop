@@ -4,6 +4,7 @@ library(tidyverse)
 # Go through basic variables
 A.number <- 9
 A.number2 <- A.number * 5
+A.word <- "Hello"
 
 # an if statement
 if (A.number2 == 45){
@@ -12,7 +13,7 @@ if (A.number2 == 45){
   print("its not 45")
 }
 
-# a for loop with a 
+# a for loop with an if statement
 for (i in 1:10){
   if (i > A.number){
     print("We've reached our target")
@@ -21,16 +22,34 @@ for (i in 1:10){
   }
 }
 
-A.word <- "Hello"
-A.scentence <- "  This is a scentance. Lots of punctuation! Simple lists: cell phone, wallet, glasses, keys.  "
-trimmed.whitespace <- trimws(A.scentence)
+# A longer string
+A.scentence <- "  This is a sentence. Lots of punctuation! Simple lists: cell phone, wallet, glasses, keys.  "
+# remove leading and trailing white space
+A.scentence <- trimws(A.scentence)
 
 # tun a string into a list
-split.string <- strsplit(trimmed.whitespace, " ")
+split.string <- strsplit(A.scentence, " ")
 
+# check if a word is in the sentence
+found <- grepl("cell", A.scentence)
+if (found){
+  print("We found it !")
+}
 
+# replace text in a sentence
+replaced.sentence <- gsub("cell ", "tele", A.scentence)
+replaced.sentence <- gsub("\\.", "==", replaced.sentence)
+# replace all capitol letters with emoji
+emoji1 <- gsub("[A-Z]", "(0_0)", replaced.sentence)
+# replace all numbers with another character
+emoji2 <- gsub("[0-9]", "^", emoji1)
+
+# Boolean variables are just true/false
 A.boolean <- TRUE
 A.boolean2 <- FALSE
+A.boolean3 <- T
+A.boolean4 <- F
+
 # idosyncracies of R's date feature
 A.date <- as.Date(25000)
 A.date2 <- as.Date(0)
@@ -194,6 +213,7 @@ draw.triple.venn(area1=nrow(cats) + nrow(both),
                  category = c("Cats", "Dogs", "Neither"), 
                  lty = "blank", 
                  fill = c("skyblue", "pink1", "mediumorchid"))
+
 
 # my favourite libraries-----------------------
 library(zoo) # helpful utilities for data manipulation

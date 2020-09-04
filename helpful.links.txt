@@ -1,0 +1,8 @@
+http://www.rebeccabarter.com/blog/2019-01-23_scoped-verbs/#mutate_all
+https://plotly-r.com/preface.html
+https://bookdown.org/paulcbauer/idv2/2-contact-material-dates.html
+https://rmarkdown.rstudio.com/articles_interactive.html
+https://cran.r-project.org/web/packages/diffobj/vignettes/diffobj.html
+https://glin.github.io/reactable/articles/examples.html
+http://www.rebeccabarter.com/blog/2019-01-23_scoped-verbs/#mutate_all
+http://www.endmemo.com/r/gsub.php#:~:text=gsub()%20function%20replaces%20all,(including%20any%20declared%20encoding).
