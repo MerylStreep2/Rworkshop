@@ -33,6 +33,11 @@ filtering.rows4 <- a.data.frame %>% filter(numbers != 4)
 # read from a csv file hosted online
 csv.dataframe.online <- read.csv("https://raw.githubusercontent.com/Synectome/Rworkshop/master/Test.data.csv")
 
+# look at the beginning of the dataframe
+head(csv.dataframe.online)
+tail(csv.dataframe.online)
+summary(csv.dataframe.online)
+
 # # read from a csv file hosted locally
 # # 1st, get the current directory of your files
 # cwd <- getwd()
@@ -49,10 +54,24 @@ dropped.na.age <- csv.dataframe.online %>% drop_na(age)
 
 # Filter out those >=65 yrs
 AgeFig <- plot_ly(x = dropped.na.age$age, type = "histogram") %>%
-  layout(title="Age Histogram (E.S. V8)",
+  layout(title="Age Histogram ",
          xaxis=list(title="Age"),
-         yaxis=list(title="Number of Respondents"))
+         yaxis=list(title="Number Users"))
 AgeFig
 
 
+yes <- dropped.na.age %>% filter(vegetarian == 'yes')
+no <- dropped.na.age %>% filter(vegetarian == 'no')
 
+age.veggie <- plot_ly(alpha = 0.5) %>%
+  add_histogram(x = yes$age, name = "Vegetarian",
+                opacity = 0.6,
+                marker = list(color = "teal")) %>%
+  add_histogram(x = no$age, name = "Non-vegetarian",
+                opacity = 0.6,
+                marker = list(color = "orange")) %>%
+  layout(title="Age Histogram Of Vegetarians vs Non-Vegetarians in User Group",
+         xaxis=list(title="Age"),
+         yaxis=list(title="Users"),
+         barmode = "overlay")
+age.veggie
