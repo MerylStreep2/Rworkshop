@@ -177,14 +177,29 @@ saveWidget(age.veggie, "Vegetarians", selfcontained = T)
 
 # lets make a venn diagram!
 library(VennDiagram)
+cats <- dropped.na.age %>% filter(cats.or.dogs == 'cats')
+dogs <- dropped.na.age %>% filter(cats.or.dogs == 'dogs')
+both <- dropped.na.age %>% filter(cats.or.dogs == 'both')
+neither <- dropped.na.age %>% filter(cats.or.dogs == 'neither')
 
+# ---Ploting a venn diagram of the logical overlap
+grid.newpage()
+draw.triple.venn(area1=nrow(cats) + nrow(both), 
+                 area2=nrow(dogs) + nrow(both),
+                 area3=nrow(neither),
+                 n12=nrow(both), 
+                 n13=0,
+                 n23=0,
+                 n123=0,
+                 category = c("Cats", "Dogs", "Neither"), 
+                 lty = "blank", 
+                 fill = c("skyblue", "pink1", "mediumorchid"))
 
 # my favourite libraries-----------------------
 library(zoo) # helpful utilities for data manipulation
-
-library(lubridate)
-library(RColorBrewer)
-library(shiny)
-library(gsheet)
+library(lubridate) # helpful for manipulating dates
+library(RColorBrewer) # creates nice colour palettes for visualizations and plots
+library(shiny) # used to create R based web applications
+library(gsheet) # an interface for using google spread sheet data without having to manually download the data.
 
 
