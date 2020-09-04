@@ -2,8 +2,33 @@
 library(tidyverse)
 
 # Go through basic variables
-A.number <- 99
+A.number <- 9
+A.number2 <- A.number * 5
+
+# an if statement
+if (A.number2 == 45){
+  print("its 45!")
+}else{
+  print("its not 45")
+}
+
+# a for loop with a 
+for (i in 1:10){
+  if (i > A.number){
+    print("We've reached our target")
+  }else{
+    print(i)
+  }
+}
+
 A.word <- "Hello"
+A.scentence <- "  This is a scentance. Lots of punctuation! Simple lists: cell phone, wallet, glasses, keys.  "
+trimmed.whitespace <- trimws(A.scentence)
+
+# tun a string into a list
+split.string <- strsplit(trimmed.whitespace, " ")
+
+
 A.boolean <- TRUE
 A.boolean2 <- FALSE
 # idosyncracies of R's date feature
@@ -14,6 +39,19 @@ A.date2 <- as.Date(0)
 A.vector.of.numbers <- c(1, 2, 3, 4, 5, 6)
 A.vector.of.words <- c("one", "two", "three", "four", "five", "six")
 A.mixed.vector <- c(1, "two", 3, "four", 5, "six")
+
+# difference of two vectors
+setdiff(A.vector.of.numbers, A.mixed.vector)
+# union of two vectors
+union(A.vector.of.numbers, A.mixed.vector)
+# intersection of two vectors
+intersect(A.vector.of.numbers, A.mixed.vector)
+
+# a for loop
+square.vector <- c()
+for (number in A.vector.of.numbers){
+  square.vector <- append(square.vector, number*number)
+}
 
 # make a list
 A.list <- list("numbers"=A.vector.of.numbers, "A.word"="Word", "a.number"=A.number)
@@ -28,6 +66,32 @@ filtering.rows1 <- a.data.frame %>% filter(numbers < 4)
 filtering.rows2 <- a.data.frame %>% filter(numbers > 4)
 filtering.rows3 <- a.data.frame %>% filter(numbers == 4)
 filtering.rows4 <- a.data.frame %>% filter(numbers != 4)
+
+# get a row by index
+a.data.frame[2,]
+# get a column by index
+a.data.frame[,2]
+# get a column by name
+a.data.frame$numbers
+# get a specific cell
+a.data.frame[3,1]
+
+# isolate rows with a loop
+for (a.row in 1:nrow(a.data.frame)){
+  print(a.data.frame[a.row])
+}
+
+# isolate cells in a column with a loop
+for (a.row in 1:nrow(a.data.frame)){
+  print(a.data.frame$A.vector.of.words[a.row])
+}
+
+# length of a vector, unique elements in a vector
+new.vector <- c("a", "a", "b", "c", "d", "d")
+length(new.vector)
+unique(new.vector)
+length(unique(new.vector))
+
 
 
 # read from a csv file hosted online
@@ -52,19 +116,43 @@ csv.dataframe.local <- read.csv(path)
 dropped.na.date <- csv.dataframe.online %>% drop_na(date)
 dropped.na.age <- csv.dataframe.online %>% drop_na(age)
 
+# format the dates 
+dropped.na.age$date <- sapply(dropped.na.age$date, function(x) as.Date(x, format="%Y-%m-%d")) 
+
+# sort the dataframe by date
+dropped.na.age <- dropped.na.age[order(dropped.na.age$date),] 
+
 # to write one of these altered data frames to a csv file
 path <- file.path(getwd(), "Desktop", 'OSI Work Folder', "R-Workshop", "No.missing.ages.csv")
 write.csv(dropped.na.date, path, row.names = FALSE)
 
+# lets make our dataframes beautiful with reactable!
+library(reactable)
+reactable(dropped.na.age)
 
-# Filter out those >=65 yrs
+reactable(dropped.na.age, columns = list(
+  first.name = colDef(style = list(background='orange')),
+  age = colDef(style = function(value) {
+                 color <- if (value >= 35) {
+                   "#008000"
+                 } else if (value < 45) {
+                   "#e00000"
+                 }
+                 list(fontWeight = 600, color = color, background="#ffeedb")
+               })
+  ))
+
+
+# Creating plots with plotly!
+library(plotly)
+
 AgeFig <- plot_ly(x = dropped.na.age$age, type = "histogram") %>%
   layout(title="Age Histogram ",
          xaxis=list(title="Age"),
          yaxis=list(title="Number Users"))
 AgeFig
 
-
+# lets split our sample based on there diet
 yes <- dropped.na.age %>% filter(vegetarian == 'yes')
 no <- dropped.na.age %>% filter(vegetarian == 'no')
 
@@ -83,6 +171,20 @@ age.veggie <- plot_ly(alpha = 0.5) %>%
          barmode = "overlay")
 age.veggie
 
+# save our plot as an html file!
+library(htmlwidgets) # create html versions of plotly graphs
+saveWidget(age.veggie, "Vegetarians", selfcontained = T)
 
-# my favourite libraries
+# lets make a venn diagram!
+library(VennDiagram)
+
+
+# my favourite libraries-----------------------
+library(zoo) # helpful utilities for data manipulation
+
+library(lubridate)
+library(RColorBrewer)
+library(shiny)
+library(gsheet)
+
 
