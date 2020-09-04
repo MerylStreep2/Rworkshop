@@ -6,15 +6,53 @@ A.number <- 99
 A.word <- "Hello"
 A.boolean <- TRUE
 A.boolean2 <- FALSE
+# idosyncracies of R's date feature
 A.date <- as.Date(25000)
 A.date2 <- as.Date(0)
 
+# make some vectors
 A.vector.of.numbers <- c(1, 2, 3, 4, 5, 6)
 A.vector.of.words <- c("one", "two", "three", "four", "five", "six")
 A.mixed.vector <- c(1, "two", 3, "four", 5, "six")
 
+# make a list
 A.list <- list("numbers"=A.vector.of.numbers, "A.word"="Word", "a.number"=A.number)
 
-a.data.frame <- data.frame(A.vector.of.numbers, A.vector.of.words, "mixed"=A.mixed.vector)
+# make a dataframe
+a.data.frame <- data.frame("numbers"=A.vector.of.numbers, A.vector.of.words, "mixed"=A.mixed.vector)
+# Select a couple of columns into a new dataframe
+subsetting.columns1 <- a.data.frame %>% select(numbers, mixed)
+subsetting.columns2 <- a.data.frame %>% select(A.vector.of.words, mixed)
+# filter rows by value and store in new dataframe
+filtering.rows1 <- a.data.frame %>% filter(numbers < 4)
+filtering.rows2 <- a.data.frame %>% filter(numbers > 4)
+filtering.rows3 <- a.data.frame %>% filter(numbers == 4)
+filtering.rows4 <- a.data.frame %>% filter(numbers != 4)
 
-subsetting.columns <- a.data.frame %>% select(numbers, mixed)
+
+# read from a csv file hosted online
+csv.dataframe.online <- read.csv("https://raw.githubusercontent.com/Synectome/Rworkshop/master/Test.data.csv")
+
+# # read from a csv file hosted locally
+# # 1st, get the current directory of your files
+# cwd <- getwd()
+# # 2nd, put in the file name of the file 
+# file <- "Test.data.csv"
+# # 3rd, mash em together to create a path to the file
+# path <- file.path(cwd, "Desktop", 'OSI Work Folder', "R-Workshop", file)
+# # 4th, read the file
+# csv.dataframe.local <- read.csv(path)
+
+# remove entries with a missing value in a given column
+dropped.na.date <- csv.dataframe.online %>% drop_na(date)
+dropped.na.age <- csv.dataframe.online %>% drop_na(age)
+
+# Filter out those >=65 yrs
+AgeFig <- plot_ly(x = dropped.na.age$age, type = "histogram") %>%
+  layout(title="Age Histogram (E.S. V8)",
+         xaxis=list(title="Age"),
+         yaxis=list(title="Number of Respondents"))
+AgeFig
+
+
+
