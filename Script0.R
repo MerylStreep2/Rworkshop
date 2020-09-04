@@ -4,7 +4,8 @@ library(tidyverse)
 # Go through basic variables
 A.number <- 9
 A.number2 <- A.number * 5
-A.word <- "Hello"
+words <- "Hello World!"
+class(words)
 
 # an if statement
 if (A.number2 == 45){
