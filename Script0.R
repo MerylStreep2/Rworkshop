@@ -7,6 +7,12 @@ A.number2 <- A.number * 5
 words <- "Hello World!"
 class(words)
 
+# Boolean variables are just true/false
+A.boolean <- TRUE
+A.boolean2 <- FALSE
+A.boolean3 <- T
+A.boolean4 <- F
+
 # an if statement
 if (A.number2 == 45){
   print("its 45!")
@@ -37,19 +43,15 @@ if (found){
   print("We found it !")
 }
 
-# replace text in a sentence
+# replace text in a sentence using gsub
+# the format for gsub is : gsub("pattern to match", "text to replace it with", Variable)
 replaced.sentence <- gsub("cell ", "tele", A.scentence)
 replaced.sentence <- gsub("\\.", "==", replaced.sentence)
+
 # replace all capitol letters with emoji
 emoji1 <- gsub("[A-Z]", "(0_0)", replaced.sentence)
 # replace all numbers with another character
 emoji2 <- gsub("[0-9]", "^", emoji1)
-
-# Boolean variables are just true/false
-A.boolean <- TRUE
-A.boolean2 <- FALSE
-A.boolean3 <- T
-A.boolean4 <- F
 
 # idosyncracies of R's date feature
 A.date <- as.Date(25000)
@@ -67,7 +69,7 @@ union(A.vector.of.numbers, A.mixed.vector)
 # intersection of two vectors
 intersect(A.vector.of.numbers, A.mixed.vector)
 
-# a for loop
+# a for loop where we append data to a new vector
 square.vector <- c()
 for (number in A.vector.of.numbers){
   square.vector <- append(square.vector, number*number)
@@ -112,8 +114,6 @@ length(new.vector)
 unique(new.vector)
 length(unique(new.vector))
 
-
-
 # read from a csv file hosted online
 csv.dataframe.online <- read.csv("https://raw.githubusercontent.com/Synectome/Rworkshop/master/Test.data.csv")
 
@@ -146,6 +146,7 @@ dropped.na.age <- dropped.na.age[order(dropped.na.age$date),]
 path <- file.path(getwd(), "Desktop", 'OSI Work Folder', "R-Workshop", "No.missing.ages.csv")
 write.csv(dropped.na.date, path, row.names = FALSE)
 
+################################################################################
 # lets make our dataframes beautiful with reactable!
 library(reactable)
 reactable(dropped.na.age)
@@ -161,8 +162,8 @@ reactable(dropped.na.age, columns = list(
                  list(fontWeight = 600, color = color, background="#ffeedb")
                })
   ))
-
-
+################################################################################
+################################################################################
 # Creating plots with plotly!
 library(plotly)
 
@@ -190,10 +191,12 @@ age.veggie <- plot_ly(alpha = 0.5) %>%
          yaxis=list(title="Users"),
          barmode = "overlay")
 age.veggie
+################################################################################
 
 # save our plot as an html file!
 library(htmlwidgets) # create html versions of plotly graphs
 saveWidget(age.veggie, "Vegetarians", selfcontained = T)
+################################################################################
 
 # lets make a venn diagram!
 library(VennDiagram)
@@ -215,12 +218,19 @@ draw.triple.venn(area1=nrow(cats) + nrow(both),
                  lty = "blank", 
                  fill = c("skyblue", "pink1", "mediumorchid"))
 
-
+################################################################################
 # my favourite libraries-----------------------
+library(tidyverse) # make life easier
+library(plotly) # graphing
 library(zoo) # helpful utilities for data manipulation
 library(lubridate) # helpful for manipulating dates
 library(RColorBrewer) # creates nice colour palettes for visualizations and plots
 library(shiny) # used to create R based web applications
 library(gsheet) # an interface for using google spread sheet data without having to manually download the data.
+
+# remember to install packages you don't have:
+# go to the packages tab on the bottom right panel
+# click on the install button in the top right of that frame
+# type in the name of the package to install.
 
 
