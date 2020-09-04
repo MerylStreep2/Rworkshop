@@ -38,19 +38,24 @@ head(csv.dataframe.online)
 tail(csv.dataframe.online)
 summary(csv.dataframe.online)
 
-# # read from a csv file hosted locally
-# # 1st, get the current directory of your files
-# cwd <- getwd()
-# # 2nd, put in the file name of the file 
-# file <- "Test.data.csv"
-# # 3rd, mash em together to create a path to the file
-# path <- file.path(cwd, "Desktop", 'OSI Work Folder', "R-Workshop", file)
-# # 4th, read the file
-# csv.dataframe.local <- read.csv(path)
+# read from a csv file hosted locally
+# 1st, get the current directory of your files
+cwd <- getwd()
+# 2nd, put in the file name of the file
+file <- "Test.data.csv"
+# 3rd, mash em together to create a path to the file
+path <- file.path(cwd, "Desktop", 'OSI Work Folder', "R-Workshop", file)
+# 4th, read the file
+csv.dataframe.local <- read.csv(path)
 
 # remove entries with a missing value in a given column
 dropped.na.date <- csv.dataframe.online %>% drop_na(date)
 dropped.na.age <- csv.dataframe.online %>% drop_na(age)
+
+# to write one of these altered data frames to a csv file
+path <- file.path(getwd(), "Desktop", 'OSI Work Folder', "R-Workshop", "No.missing.ages.csv")
+write.csv(dropped.na.date, path, row.names = FALSE)
+
 
 # Filter out those >=65 yrs
 AgeFig <- plot_ly(x = dropped.na.age$age, type = "histogram") %>%
@@ -66,12 +71,18 @@ no <- dropped.na.age %>% filter(vegetarian == 'no')
 age.veggie <- plot_ly(alpha = 0.5) %>%
   add_histogram(x = yes$age, name = "Vegetarian",
                 opacity = 0.6,
+                bingroup=5,
                 marker = list(color = "teal")) %>%
   add_histogram(x = no$age, name = "Non-vegetarian",
                 opacity = 0.6,
+                bingroup=5,
                 marker = list(color = "orange")) %>%
   layout(title="Age Histogram Of Vegetarians vs Non-Vegetarians in User Group",
          xaxis=list(title="Age"),
          yaxis=list(title="Users"),
          barmode = "overlay")
 age.veggie
+
+
+# my favourite libraries
+
