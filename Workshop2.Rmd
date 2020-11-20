@@ -1,0 +1,191 @@
+---
+title: "R WorkShop 2"
+output:
+  html_document:
+    df_print: paged
+---
+#Tidyverse Functions: an overview
+
+In this Document we will explore a number of functions in the tidyverse library collection
+to assist you in manipulating data sets in efficient and easy to read ways.
+
+The functions we will be looking at are:
+- select()
+- filter()
+- group_by()
+- tally()
+- arrange()
+- mutate()
+- mutate_at()
+
+The Data set we will use in our examples is called mtcars, and is a built in 
+dataset with the R programming language. The dataset contains data on motor trends 
+and road tests.
+
+Format of the dataframe: 
+A data frame with 32 observations(rows) on 11 (numeric) variables(columns).
+
+[, 1]	mpg	Miles/(US) gallon
+[, 2]	cyl	Number of cylinders
+[, 3]	disp	Displacement (cu.in.)
+[, 4]	hp	Gross horsepower
+[, 5]	drat	Rear axle ratio
+[, 6]	wt	Weight (1000 lbs)
+[, 7]	qsec	1/4 mile time
+[, 8]	vs	Engine (0 = V-shaped, 1 = straight)
+[, 9]	am	Transmission (0 = automatic, 1 = manual)
+[,10]	gear	Number of forward gears
+[,11]	carb	Number of carburetors
+
+###Load Libraries and Dataset
+```{r, load Librarys, echo=FALSE, warning=FALSE, message=FALSE}
+# Load the required library
+library(tidyverse)
+library(reactable)
+# library(lubridate)  for %m+% months(3) example
+
+# store our dataset mtcars in the variable 'data'
+data <- mtcars
+
+# Display the size of the dataset
+dim(data)
+
+# Display the dataset
+data
+```
+
+###Select Specific Columns
+The function Select() comes from the library called 'dplyr' which is a part of tidyverse.
+This function allows us to subset a dataframe by specifying column names.
+```{r}
+# We are selecting columns mpg, disp, hp from the dataframe 'data' 
+# and storing it in the new dataframe called 'subset1'
+subset1 <- data %>% select(mpg, disp, hp)
+
+# We are selecting columns drat, cyl, wt from the dataframe 'data' 
+# and storing it in the new dataframe called 'subset2'
+subset2 <- data %>% select(drat, cyl, wt)
+
+# We are selecting columns mpg, hp from the dataframe 'subset1' 
+# and storing it in the new dataframe called 'subset1.2'
+subset1.2 <- subset1 %>% select(mpg, hp)
+
+# We are displaying the three dataframes we've subsetted.
+subset1
+subset2
+subset1.2
+```
+
+
+###Filter Rows by Cell Contents
+```{r}
+efficient_cars <- data %>% filter(mpg > 18)
+efficient_cars
+
+fast_cars <- data %>% filter(hp >200)
+fast_cars
+
+
+not_8_cyl <- data %>% filter(cyl!=8)
+not_8_cyl 
+
+automatic <- data %>% filter(am==0)
+automatic
+
+manual <- data %>% filter(am!=0)
+# same as 
+manual <- data %>% filter(am==1)
+manual
+
+# Combining Queries into a single statement
+
+fast_manual <- data %>% filter((hp>200)&(am==1))
+fast_manual
+
+heavy_inefficient <- data %>% filter((wt>3.7)&(mpg<18))
+heavy_inefficient
+```
+
+
+###Group_by
+```{r}
+# Grouping things wont change how they look, but will change how they behave
+cylinders <- data %>% group_by(cyl)
+cylinders
+
+# returns the max weight for each cylinder group
+max_wt <- cylinders %>% filter(wt == max(wt))
+# returns the max weight for each cylinder group
+min_wt <- cylinders %>% filter(wt == min(wt))
+
+# merge the min and max weights by cylinder into a new df
+min_max_wt_by_cyl <- rbind(max_wt, min_wt)
+min_max_wt_by_cyl
+
+# To remove the grouping attribute from a dataframe
+cylinders %>% ungroup()
+```
+###Arrange
+```{r}
+# Descending horse power
+sort_hp <- data %>% arrange(desc(hp))
+sort_hp
+
+# Ascending weight
+weight_wt <- data %>% arrange(wt)
+weight_wt
+
+# Sorting while preserving groups
+# These amount to the same thing, as the cylinders dataframe is already grouped
+cylinders_sorted <- cylinders %>% arrange(wt, .by_group=TRUE)
+cylinders_sorted <- data %>% group_by(cyl) %>% arrange(wt, .by_group=TRUE)
+cylinders_sorted 
+
+# arranging across multiple columns at once
+# hp mpg
+hp_by_mpg <- data %>% arrange(hp, mpg)
+hp_by_mpg
+```
+
+
+###Tally
+```{r}
+
+am_count <- data %>% group_by(am) %>% tally() %>% arrange(desc(n))
+am_count
+
+
+cyl_count <- data %>% group_by(cyl) %>% tally(sort=TRUE)
+cyl_count
+```
+
+
+
+
+
+
+###Mutate : change multiple cells
+```{r}
+# to create a proportions column on the manual/automatic tally am
+total <- sum(am_count$n)
+am_count <- am_count %>% mutate(proportion = ((n/total)))
+am_count <- am_count %>% mutate(percentage = (signif((proportion), 2)*100))
+am_count
+
+```
+
+
+
+###Mutate_at : change multiple cells
+```{r}
+Fidelity_working <- Fidelity_working %>%
+  mutate_at(vars(Intervention.Setting), gsub, pattern = "\\s", replacement="")
+
+Fidelity_working <- Fidelity_working %>%
+  mutate_at(vars(Intervention.Setting), tolower)
+```
+
+
+
+
+
