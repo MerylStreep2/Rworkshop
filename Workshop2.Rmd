@@ -85,7 +85,6 @@ efficient_cars
 fast_cars <- data %>% filter(hp >200)
 fast_cars
 
-
 not_8_cyl <- data %>% filter(cyl!=8)
 not_8_cyl 
 
@@ -166,6 +165,11 @@ cyl_count
 
 ###Mutate : change multiple cells
 ```{r}
+# the spread of mpg on the dataset
+mpg_range <- data %>% mutate(mpg_diff = mpg-(min(mpg))) 
+mpg_range %>% select(mpg, mpg_diff) %>% arrange(mpg_diff)
+
+
 # to create a proportions column on the manual/automatic tally am
 total <- sum(am_count$n)
 am_count <- am_count %>% mutate(proportion = ((n/total)))
@@ -178,11 +182,20 @@ am_count
 
 ###Mutate_at : change multiple cells
 ```{r}
-Fidelity_working <- Fidelity_working %>%
-  mutate_at(vars(Intervention.Setting), gsub, pattern = "\\s", replacement="")
+# function to turn miles per gallon into kilometers per litre
+mpg_2_kpl <- function(mpg){
+  return(mpg*0.425144)
+}
+# function to turn pounds into kilograms
+lbs_2_kg <- function(lbs){
+  return(lbs*0.453592)
+}
 
-Fidelity_working <- Fidelity_working %>%
-  mutate_at(vars(Intervention.Setting), tolower)
+canadian_cars <- data %>% mutate_at(vars(mpg), mpg_2_kpl)
+canadian_cars <- canadian_cars %>% mutate_at(vars(wt), lbs_2_kg)
+canadian_cars
+
+
 ```
 
 
